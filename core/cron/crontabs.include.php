@@ -68,6 +68,9 @@ if ($config->system->captcha_support) {
 // The following files are updated every 24h only because the queries are quite expensive
 // and they don't need a fast update interval
 $update_delay = 86400;
+if (hours_from_last_migration()<24)
+    $update_delay = 3600;
+
 $pokedex_rarity_file = SYS_PATH.'/core/json/pokedex.rarity.json';
 $nests_file = SYS_PATH.'/core/json/nests.stats.json';
 
