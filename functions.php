@@ -170,3 +170,15 @@ function gym_level($prestige)
 
 	return $gym_level;
 }
+
+function hours_from_last_migration(){
+    $sdate = 1493856000;
+    $cdate = time();
+    $interval = 14 * 24 * 3600;
+    while ($sdate<$cdate)
+              $sdate+=$interval;
+
+    $time_from_last_migration = $interval - ($sdate-$cdate);
+    return floor($time_from_last_migration/3600);
+}
+
