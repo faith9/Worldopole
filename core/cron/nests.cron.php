@@ -12,10 +12,16 @@ if (!empty($config->system->nest_exclude_pokemon)) {
 	$pokemon_exclude_sql = "AND p.pokemon_id NOT IN (".implode(",", $config->system->nest_exclude_pokemon).")";
 }
 
+
+$interval = 24;
+$hours_from_last_migration = hours_from_last_migration();
+if ($hours_from_last_migration< 24)
+    $interval = $hours_from_last_migration;
+
 $req = "SELECT p.pokemon_id, max(p.latitude) AS latitude, max(p.longitude) AS longitude, count(p.pokemon_id) AS total_pokemon, s.kind, s.latest_seen
         FROM pokemon p 
         INNER JOIN spawnpoint s ON (p.spawnpoint_id = s.id) 
-        WHERE p.disappear_time > UTC_TIMESTAMP() - INTERVAL 24 HOUR 
+        WHERE p.disappear_time > UTC_TIMESTAMP() - INTERVAL $interval HOUR 
         ".$pokemon_exclude_sql." 
         GROUP BY p.spawnpoint_id, p.pokemon_id 
         HAVING count(p.pokemon_id) >= 6 
